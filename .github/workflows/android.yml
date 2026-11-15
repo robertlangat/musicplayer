@@ -16,6 +16,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Presence checks (values are never printed): a step shows as "success" when the
+      # setting exists, "skipped" when it doesn't.
+      - name: "check secret ULTRA_KEYSTORE_BASE64"
+        if: env.S1 != ''
+        env: { S1: "${{ secrets.ULTRA_KEYSTORE_BASE64 }}" }
+        run: echo present
+      - name: "check secret ULTRA_KEYSTORE_PASSWORD"
+        if: env.S2 != ''
+        env: { S2: "${{ secrets.ULTRA_KEYSTORE_PASSWORD }}" }
+        run: echo present
+      - name: "check secret ULTRA_KEY_ALIAS"
+        if: env.S3 != ''
+        env: { S3: "${{ secrets.ULTRA_KEY_ALIAS }}" }
+        run: echo present
+      - name: "check secret ULTRA_KEY_PASSWORD"
+        if: env.S4 != ''
+        env: { S4: "${{ secrets.ULTRA_KEY_PASSWORD }}" }
+        run: echo present
+      - name: "check variable ULTRA_KEYSTORE_BASE64 (Variables tab)"
+        if: vars.ULTRA_KEYSTORE_BASE64 != ''
+        run: echo present
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
