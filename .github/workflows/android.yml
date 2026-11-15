@@ -16,11 +16,15 @@ jobs:
       HAS_STORE_PW: ${{ secrets.ULTRA_KEYSTORE_PASSWORD != '' }}
       HAS_ALIAS: ${{ secrets.ULTRA_KEY_ALIAS != '' }}
       HAS_KEY_PW: ${{ secrets.ULTRA_KEY_PASSWORD != '' }}
+      HAS_GH_TOKEN: ${{ secrets.GITHUB_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
       # Presence checks (values are never printed): a step shows as "success" when the
       # setting exists, "skipped" when it doesn't.
+      - name: "check control GITHUB_TOKEN (always present)"
+        if: env.HAS_GH_TOKEN == 'true'
+        run: echo present
       - name: "check secret ULTRA_KEYSTORE_BASE64"
         if: env.HAS_KEYSTORE == 'true'
         run: echo present
