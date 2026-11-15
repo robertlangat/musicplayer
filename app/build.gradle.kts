@@ -28,8 +28,9 @@ android {
         applicationId = "com.ultramusicplayer.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        // Stores require a higher versionCode for every upload; CI passes its run number.
+        versionCode = (System.getenv("VERSION_CODE") ?: "1").toInt()
+        versionName = "1.0.${System.getenv("VERSION_CODE") ?: "0"}"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         val ytKey = secret("YOUTUBE_API_KEY") ?: ""

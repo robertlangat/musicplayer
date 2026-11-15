@@ -9,7 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # lets the job publish the APK as a release download
+      contents: write # lets the job publish the APK/AAB as release downloads
+    env:
+      VERSION_CODE: ${{ github.run_number }}
+      HAS_KEYSTORE: ${{ secrets.ULTRA_KEYSTORE_BASE64 != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -45,6 +48,39 @@ jobs:
             --title "Ultra Music Player – latest debug build" \
             --notes "Debug APK built from ${GITHUB_SHA::7}. Download UltraMusicPlayer-debug.apk on your phone and tap it to install (allow 'Install unknown apps' when asked)." \
             --prerelease --target "$GITHUB_SHA"
+
+      # ---- Store release (signed App Bundle + APK) -------------------------------------
+      # Needs four repository secrets: ULTRA_KEYSTORE_BASE64, ULTRA_KEYSTORE_PASSWORD,
+      # ULTRA_KEY_ALIAS, ULTRA_KEY_PASSWORD. Without them the release build still runs
+      # (unsigned) so shrinking/lint problems are caught early.
+      - name: Decode release keystore
+        if: env.HAS_KEYSTORE == 'true'
+        env:
+          ULTRA_KEYSTORE_BASE64: ${{ secrets.ULTRA_KEYSTORE_BASE64 }}
+        run: |
+          echo "$ULTRA_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "ULTRA_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Release App Bundle and APK
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ULTRA_KEYSTORE_PASSWORD: ${{ secrets.ULTRA_KEYSTORE_PASSWORD }}
+          ULTRA_KEY_ALIAS: ${{ secrets.ULTRA_KEY_ALIAS }}
+          ULTRA_KEY_PASSWORD: ${{ secrets.ULTRA_KEY_PASSWORD }}
+        run: ./gradlew --no-daemon bundleRelease assembleRelease
+
+      - name: Publish signed bundle as the "store-latest" release
+        if: env.HAS_KEYSTORE == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/bundle/release/app-release.aab "UltraMusicPlayer-v1.0.${VERSION_CODE}.aab"
+          cp app/build/outputs/apk/release/app-release.apk "UltraMusicPlayer-v1.0.${VERSION_CODE}.apk"
+          gh release delete store-latest --yes --cleanup-tag || true
+          gh release create store-latest "UltraMusicPlayer-v1.0.${VERSION_CODE}.aab" "UltraMusicPlayer-v1.0.${VERSION_CODE}.apk" \
+            --title "Ultra Music Player 1.0.${VERSION_CODE} – store build (signed)" \
+            --notes "Signed release build, versionCode ${VERSION_CODE}, from ${GITHUB_SHA::7}. Upload the .aab to the Amazon Appstore (the .apk is the same build, also accepted by Amazon). Uses the real AdMob ad units." \
+            --target "$GITHUB_SHA"
 
       - name: Upload test reports
         if: always()
