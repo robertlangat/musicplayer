@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # lets the job publish the APK as a release download
     steps:
       - uses: actions/checkout@v4
 
@@ -31,6 +33,18 @@ jobs:
         with:
           name: UltraMusicPlayer-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publish APK as the "debug-latest" release (direct phone download)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk UltraMusicPlayer-debug.apk
+          gh release delete debug-latest --yes --cleanup-tag || true
+          gh release create debug-latest UltraMusicPlayer-debug.apk \
+            --title "Ultra Music Player – latest debug build" \
+            --notes "Debug APK built from ${GITHUB_SHA::7}. Download UltraMusicPlayer-debug.apk on your phone and tap it to install (allow 'Install unknown apps' when asked)." \
+            --prerelease --target "$GITHUB_SHA"
 
       - name: Upload test reports
         if: always()
