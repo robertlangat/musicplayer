@@ -13,26 +13,25 @@ jobs:
     env:
       VERSION_CODE: ${{ github.run_number }}
       HAS_KEYSTORE: ${{ secrets.ULTRA_KEYSTORE_BASE64 != '' }}
+      HAS_STORE_PW: ${{ secrets.ULTRA_KEYSTORE_PASSWORD != '' }}
+      HAS_ALIAS: ${{ secrets.ULTRA_KEY_ALIAS != '' }}
+      HAS_KEY_PW: ${{ secrets.ULTRA_KEY_PASSWORD != '' }}
     steps:
       - uses: actions/checkout@v4
 
       # Presence checks (values are never printed): a step shows as "success" when the
       # setting exists, "skipped" when it doesn't.
       - name: "check secret ULTRA_KEYSTORE_BASE64"
-        if: env.S1 != ''
-        env: { S1: "${{ secrets.ULTRA_KEYSTORE_BASE64 }}" }
+        if: env.HAS_KEYSTORE == 'true'
         run: echo present
       - name: "check secret ULTRA_KEYSTORE_PASSWORD"
-        if: env.S2 != ''
-        env: { S2: "${{ secrets.ULTRA_KEYSTORE_PASSWORD }}" }
+        if: env.HAS_STORE_PW == 'true'
         run: echo present
       - name: "check secret ULTRA_KEY_ALIAS"
-        if: env.S3 != ''
-        env: { S3: "${{ secrets.ULTRA_KEY_ALIAS }}" }
+        if: env.HAS_ALIAS == 'true'
         run: echo present
       - name: "check secret ULTRA_KEY_PASSWORD"
-        if: env.S4 != ''
-        env: { S4: "${{ secrets.ULTRA_KEY_PASSWORD }}" }
+        if: env.HAS_KEY_PW == 'true'
         run: echo present
       - name: "check variable ULTRA_KEYSTORE_BASE64 (Variables tab)"
         if: vars.ULTRA_KEYSTORE_BASE64 != ''
