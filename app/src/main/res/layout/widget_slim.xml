@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Slim Player (4x1): charcoal pill with title, play/pause and next. No artwork. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_slim"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="18dp"
+    android:paddingEnd="8dp">
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_notification"
+        android:tint="@color/accent" />
+
+    <TextView
+        android:id="@+id/w_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/nothing_playing"
+        android:textColor="@color/widget_text"
+        android:textSize="15sp" />
+
+    <ImageButton
+        android:id="@+id/w_play"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/widget_btn_circle"
+        android:contentDescription="@string/play"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_w_play" />
+
+    <ImageButton
+        android:id="@+id/w_next"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="4dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/next"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_w_next" />
+</LinearLayout>

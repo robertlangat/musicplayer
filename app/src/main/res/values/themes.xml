@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="charcoal">#FF1C1D21</color>
+    <color name="charcoal_surface">#FF26282E</color>
+    <color name="accent">#FF5EC8F2</color>
+    <color name="widget_text">#FFFFFFFF</color>
+    <color name="widget_text_dim">#B3FFFFFF</color>
+    <color name="launcher_bg">#FF1C1D21</color>
+
+    <style name="Theme.UltraMusicPlayer" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/charcoal</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

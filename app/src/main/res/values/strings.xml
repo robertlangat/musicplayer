@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ultra Music Player</string>
+    <string name="stop">Stop</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="next">Next track</string>
+    <string name="previous">Previous track</string>
+    <string name="nothing_playing">Nothing playing</string>
+    <string name="tap_to_open">Tap to open Ultra Music Player</string>
+    <string name="widget_slim_name">Ultra · Slim Player</string>
+    <string name="widget_album_name">Ultra · Album Player</string>
+    <string name="widget_strip_name">Ultra · Artwork Strip</string>
+    <string name="widget_slim_desc">Title, play/pause and next in a compact 4×1 bar</string>
+    <string name="widget_album_desc">Large artwork with title and controls (2×2)</string>
+    <string name="widget_strip_desc">Artwork, title, artist and full controls (4×1)</string>
+    <string name="artwork">Album artwork</string>
+</resources>
