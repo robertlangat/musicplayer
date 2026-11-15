@@ -107,6 +107,18 @@ jobs:
             --notes "Signed release build, versionCode ${VERSION_CODE}, from ${GITHUB_SHA::7}. Upload the .aab to the Amazon Appstore (the .apk is the same build, also accepted by Amazon). Uses the real AdMob ad units." \
             --target "$GITHUB_SHA"
 
+      - name: Publish unsigned bundle (when no signing secrets are configured)
+        if: env.HAS_KEYSTORE != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/bundle/release/app-release.aab "UltraMusicPlayer-v1.0.${VERSION_CODE}-unsigned.aab"
+          gh release delete unsigned-latest --yes --cleanup-tag || true
+          gh release create unsigned-latest "UltraMusicPlayer-v1.0.${VERSION_CODE}-unsigned.aab" \
+            --title "Unsigned release bundle 1.0.${VERSION_CODE} (not for upload)" \
+            --notes "Unsigned. Must be signed with the release key before uploading to a store." \
+            --prerelease --target "$GITHUB_SHA"
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
