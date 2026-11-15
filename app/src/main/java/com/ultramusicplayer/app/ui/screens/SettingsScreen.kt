@@ -234,6 +234,15 @@ fun SettingsScreen(vm: MainViewModel, nav: NavHostController, settings: AppSetti
                 )
             }
 
+            if (com.ultramusicplayer.app.ads.Ads.privacyOptionsRequired) {
+                SettingsCard("Ads & privacy") {
+                    Text("Review or change your ad personalisation choices.", style = MaterialTheme.typography.bodySmall)
+                    OutlinedButton(onClick = {
+                        (context as? android.app.Activity)?.let { com.ultramusicplayer.app.ads.Ads.showPrivacyOptions(it) }
+                    }) { Text("Privacy options") }
+                }
+            }
+
             SettingsCard("About") {
                 Text("Ultra Music Player 1.0 — offline music player", style = MaterialTheme.typography.bodySmall)
                 TextButton(onClick = { vm.restartOnboarding() }) { Text("Show welcome screens again") }

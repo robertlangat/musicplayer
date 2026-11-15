@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -43,6 +44,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.ultramusicplayer.app.ads.Ads
+import com.ultramusicplayer.app.ads.BannerAd
 import com.ultramusicplayer.app.data.AppSettings
 import com.ultramusicplayer.app.data.Library
 import com.ultramusicplayer.app.ui.components.AddToPlaylistDialog
@@ -135,6 +138,12 @@ private fun MainNav(vm: MainViewModel, settings: AppSettings) {
     val backStack by nav.currentBackStackEntryAsState()
     val route = backStack?.destination?.route
     var homeTab by rememberSaveable { mutableIntStateOf(0) }
+    val context = LocalContext.current
+    // Opening an album, artist, playlist, genre or folder is a natural break for an
+    // interstitial; Ads applies the frequency cap.
+    LaunchedEffect(backStack?.id) {
+        if (backStack?.destination?.route == Routes.DETAIL) Ads.onNaturalBreak(context)
+    }
 
     val actions = remember(nav) {
         SongActions(
@@ -186,6 +195,8 @@ private fun MainNav(vm: MainViewModel, settings: AppSettings) {
                         VideoSearchScreen(vm, nav, entry.arguments?.getString("q").orEmpty())
                     }
                 }
+                val showBanner = route != Routes.NOW && route != Routes.TRIM && route != Routes.EDIT
+                if (showBanner) BannerAd()
                 val hideMini = route == Routes.NOW || route == Routes.TRIM
                 if (playerState.current != null && !hideMini) {
                     MiniPlayer(playerState, vm, onOpen = { nav.navigate(Routes.NOW) })

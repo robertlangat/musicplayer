@@ -83,6 +83,16 @@ Video search works without a key: it opens the YouTube app or the browser. To sh
 
 ---
 
+## Ads (AdMob)
+
+- **App ID** `ca-app-pub-8306955081407788~4147890222` is set in the manifest (through `manifestPlaceholders` in `app/build.gradle.kts`).
+- **Banner** `ca-app-pub-8306955081407788/5403317480` is an anchored adaptive banner above the mini-player. It's hidden on Now Playing, Edit and Trim.
+- **Interstitial** `ca-app-pub-8306955081407788/5572652532` may show when you open an album, artist, playlist, genre or folder. It shows at most every 4th time, no more than once every 3 minutes, and never in the first minute of a session.
+- Ads are **muted**, so they never interrupt your music.
+- On first launch, the Google consent form (UMP) appears where the law requires it (EEA, UK, Switzerland). A **Privacy options** button then appears in Settings.
+- **Debug builds show Google's test ads.** Clicking real ads on your own phone can get an AdMob account suspended. Release builds (`./gradlew bundleRelease`) use the real unit IDs. To try real units in a debug build, build with `./gradlew assembleDebug -PuseRealAds=true`, and add your phone as a test device in AdMob first.
+- Before publishing, add an `app-ads.txt` file to your developer website and link the app in AdMob once it's on Google Play.
+
 ## Features
 
 | Area | What's implemented |

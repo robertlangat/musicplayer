@@ -19,8 +19,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- Only used by the optional YouTube Data API search when an API key is configured. -->
+    <!-- AdMob ads and the optional YouTube Data API search. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- "Set as ringtone": the user grants this on the system "Modify system settings" screen. -->
     <uses-permission
@@ -50,6 +51,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UltraMusicPlayer"
         tools:targetApi="35">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${admobAppId}" />
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
+            android:value="true" />
 
         <activity
             android:name=".MainActivity"

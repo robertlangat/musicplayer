@@ -13,3 +13,5 @@
 # Widget providers and service are referenced from the manifest (kept automatically),
 # keep the EQ processor in case of reflective Media3 lookups.
 -keep class com.ultramusicplayer.app.playback.** { *; }
+
+# Google Mobile Ads ships its own consumer rules; nothing extra needed.

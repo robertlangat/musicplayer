@@ -34,6 +34,12 @@ android {
         vectorDrawables.useSupportLibrary = true
         val ytKey = secret("YOUTUBE_API_KEY") ?: ""
         buildConfigField("String", "YOUTUBE_API_KEY", "\"$ytKey\"")
+
+        // AdMob. The App ID is public (it ships in every APK). Ad unit IDs: real ones here,
+        // replaced by Google's official test units in debug builds below.
+        manifestPlaceholders["admobAppId"] = "ca-app-pub-8306955081407788~4147890222"
+        buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-8306955081407788/5403317480\"")
+        buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-8306955081407788/5572652532\"")
     }
 
     signingConfigs {
@@ -62,6 +68,12 @@ android {
         }
         debug {
             isMinifyEnabled = false
+            // Test ads while developing: clicking real ads on your own device can get the AdMob
+            // account suspended. Build with -PuseRealAds=true to try the real units in debug.
+            if (project.findProperty("useRealAds") != "true") {
+                buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/9214589741\"")
+                buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\"")
+            }
         }
     }
 
@@ -129,6 +141,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.9.0")
 
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.1.0")
     implementation("net.jthink:jaudiotagger:3.0.1")
 
     testImplementation("junit:junit:4.13.2")
