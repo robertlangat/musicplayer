@@ -83,6 +83,10 @@ Video search works without a key: it opens the YouTube app or the browser. To sh
 
 ---
 
+## Privacy policy
+
+See [PRIVACY_POLICY.md](PRIVACY_POLICY.md). Use its public link for store listings.
+
 ## Ads (AdMob)
 
 - **App ID** `ca-app-pub-8306955081407788~4147890222` is set in the manifest (through `manifestPlaceholders` in `app/build.gradle.kts`).
